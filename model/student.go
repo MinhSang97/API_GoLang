@@ -13,7 +13,9 @@ type Student struct {
 	Age          int       `json:"age,omitempty”`
 	Grade        float32   `json:"grade,omitempty”`
 	ClassName    string    `json:"class_name,omitempty"`
-	EntranceDate time.Time `json:"entrance_date" gorm:"-"`
+	EntranceDate time.Time `json:"entrance_date"`
+	CreatedAt    time.Time `json:"created_at"`
+	UpdatedAt    time.Time `json:"updated_at"`
 }
 
 func (b Student) ReceiverGetFullName() string {

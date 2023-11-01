@@ -2,12 +2,13 @@ package main
 
 import (
 	"app/dbutil"
-	"app/model"
+	"app/payload"
 	"net/http"
 
 	"gorm.io/gorm"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 func main() {
@@ -51,7 +52,11 @@ func main() {
 
 func CreateItem(db *gorm.DB) func(*gin.Context) {
 	return func(c *gin.Context) {
-		var data model.Student
+		var data payload.AddStudentRequest
+
+		var validate *validator.Validate
+
+		validate = validator.New(validator.WithRequiredStructEnabled())
 
 		if err := c.ShouldBind(&data); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
@@ -59,8 +64,16 @@ func CreateItem(db *gorm.DB) func(*gin.Context) {
 			})
 			return
 		}
+		err := validate.Struct(data)
 
-		if err := db.Create(&data).Error; err != nil {
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": err.Error(),
+			})
+		}
+		student := data.ToModel()
+
+		if err := db.Create(&student).Error; err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"error": err.Error(),
 			})
@@ -68,7 +81,7 @@ func CreateItem(db *gorm.DB) func(*gin.Context) {
 		}
 
 		c.JSON(http.StatusOK, gin.H{
-			"data": data.ID,
+			"id": student.ID,
 		})
 	}
 }
