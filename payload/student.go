@@ -8,8 +8,8 @@ import (
 type AddStudentRequest struct {
 	FirstName    string    `json:"first_name" validate:"required"`
 	LastName     string    `json:"last_name" validate:"required"`
-	Age          int       `json: "age”  validate:"required,gt=0"`
-	Grade        float32   `json: "grade” validate:"gte=0,lte=10"`
+	Age          int       `json:"age" validate:"required,gt=0"`
+	Grade        float32   `json:"grade" validate:"gte=0,lte=10"`
 	ClassName    string    `json:"class_name"`
 	EntranceDate time.Time `json:"entrance_date" validate:"required"`
 }
