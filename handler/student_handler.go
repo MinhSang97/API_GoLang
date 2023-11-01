@@ -12,8 +12,9 @@ import (
 
 func CreateItem(db *gorm.DB) func(*gin.Context) {
 	return func(c *gin.Context) {
-		var data payload.AddStudentRequest
 
+		var data payload.AddStudentRequest
+		
 		var validate *validator.Validate
 
 		validate = validator.New(validator.WithRequiredStructEnabled())
