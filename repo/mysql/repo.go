@@ -6,12 +6,11 @@ import (
 	"context"
 	"fmt"
 
-	// "gopkg.in/DataDog/dd-trace-go.v1/contrib/gorm.io/gorm.v1"
 	"gorm.io/gorm"
 )
 
 type studentRepository struct {
-	db *gorm.DB	
+	db *gorm.DB
 }
 
 func (s studentRepository) GetOneByID(ctx context.Context, id int) (model.Student, error) {

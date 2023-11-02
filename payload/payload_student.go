@@ -12,6 +12,8 @@ type AddStudentRequest struct {
 	Grade        float32   `json:"grade" validate:"gte=0,lte=10"`
 	ClassName    string    `json:"class_name"`
 	EntranceDate time.Time `json:"entrance_date" validate:"required"`
+	CreatedAt    time.Time `json:"created_at"`
+	UpdatedAt    time.Time `json:"updated_at"`
 }
 
 func (c *AddStudentRequest) ToModel() model.Student {
@@ -22,5 +24,7 @@ func (c *AddStudentRequest) ToModel() model.Student {
 		Grade:        c.Grade,
 		ClassName:    c.ClassName,
 		EntranceDate: c.EntranceDate,
+		CreatedAt:    c.CreatedAt,
+		UpdatedAt:    c.UpdatedAt,
 	}
 }

@@ -14,7 +14,7 @@ func CreateItem(db *gorm.DB) func(*gin.Context) {
 	return func(c *gin.Context) {
 
 		var data payload.AddStudentRequest
-		
+
 		var validate *validator.Validate
 
 		validate = validator.New(validator.WithRequiredStructEnabled())
@@ -34,12 +34,12 @@ func CreateItem(db *gorm.DB) func(*gin.Context) {
 		}
 		student := data.ToModel()
 
-		if err := db.Create(&student).Error; err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error": err.Error(),
-			})
-			return
-		}
+		//if err := db.Create(&student).Error; err != nil {
+		//	c.JSON(http.StatusBadRequest, gin.H{
+		//		"error": err.Error(),
+		//	})
+		//	return
+		//}
 
 		c.JSON(http.StatusOK, gin.H{
 			"id": student.ID,

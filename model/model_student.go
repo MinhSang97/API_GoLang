@@ -10,9 +10,9 @@ type Student struct {
 	ID           int64     `json:"id"`
 	FirstName    string    `json:"first_name"`
 	LastName     string    `json:"last_name"`
-	Age          int       `json:"age,omitempty”`
-	Grade        float32   `json:"grade,omitempty”`
-	ClassName    string    `json:"class_name,omitempty"`
+	Age          int       `json:"age"`
+	Grade        float32   `json:"grade"`
+	ClassName    string    `json:"class_name"`
 	EntranceDate time.Time `json:"entrance_date"`
 	CreatedAt    time.Time `json:"created_at"`
 	UpdatedAt    time.Time `json:"updated_at"`
