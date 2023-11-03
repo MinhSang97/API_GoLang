@@ -16,8 +16,8 @@ type AddStudentRequest struct {
 	UpdatedAt    time.Time `json:"updated_at"`
 }
 
-func (c *AddStudentRequest) ToModel() model.Student {
-	return model.Student{
+func (c *AddStudentRequest) ToModel() (*model.Student, error) {
+	student := &model.Student{
 		FirstName:    c.FirstName,
 		LastName:     c.LastName,
 		Age:          c.Age,
@@ -27,4 +27,17 @@ func (c *AddStudentRequest) ToModel() model.Student {
 		CreatedAt:    c.CreatedAt,
 		UpdatedAt:    c.UpdatedAt,
 	}
+
+	return student, nil
+}
+
+func (c *AddStudentRequest) FromModel(student *model.Student) {
+	c.FirstName = student.FirstName
+	c.LastName = student.LastName
+	c.Age = student.Age
+	c.Grade = student.Grade
+	c.ClassName = student.ClassName
+	c.EntranceDate = student.EntranceDate
+	c.CreatedAt = student.CreatedAt
+	c.UpdatedAt = student.UpdatedAt
 }

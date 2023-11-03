@@ -8,7 +8,9 @@ import (
 	"net/http"
 )
 
-// func (students model.Student) TableName() string { return "students" }
+//func (students payload.AddStudentRequest) TableName() string {
+//	return students
+//}
 
 func CreateItem(db *gorm.DB) func(*gin.Context) {
 	return func(c *gin.Context) {
@@ -25,6 +27,7 @@ func CreateItem(db *gorm.DB) func(*gin.Context) {
 			})
 			return
 		}
+
 		err := validate.Struct(data)
 
 		if err != nil {
@@ -32,7 +35,17 @@ func CreateItem(db *gorm.DB) func(*gin.Context) {
 				"error": err.Error(),
 			})
 		}
-		student := data.ToModel()
+
+		student, err := data.ToModel()
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": "Internal Server Error",
+			})
+			return
+		}
+
+		data.FromModel(student)
 
 		//if err := db.Create(&student).Error; err != nil {
 		//	c.JSON(http.StatusBadRequest, gin.H{
@@ -42,7 +55,8 @@ func CreateItem(db *gorm.DB) func(*gin.Context) {
 		//}
 
 		c.JSON(http.StatusOK, gin.H{
-			"id": student.ID,
+			"id":      student.ID,
+			"student": data,
 		})
 	}
 }

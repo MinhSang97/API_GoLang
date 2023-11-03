@@ -3,12 +3,13 @@ package framework
 import (
 	"app/dbutil"
 	"app/handler"
+	"fmt"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 func Route() {
 	db := dbutil.ConnectDB()
+	fmt.Println("Connected: ", db)
 
 	// CRUD: Create, Read, Update, Delete
 	// POST /v1/items (create a new item)
@@ -30,16 +31,6 @@ func Route() {
 		}
 	}
 
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
-	})
-	r.POST("/data", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
-	})
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 
 }
