@@ -2,10 +2,16 @@ package handler
 
 import (
 	"app/payload"
+	"app/repo/mysql"
+	"context"
+	"fmt"
+	"net/http"
+	"os"
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"gorm.io/gorm"
-	"net/http"
 )
 
 //func (students payload.AddStudentRequest) TableName() string {
@@ -15,20 +21,20 @@ import (
 func CreateItem(db *gorm.DB) func(*gin.Context) {
 	return func(c *gin.Context) {
 
-		var data payload.AddStudentRequest
+		var Data = payload.AddStudentRequest{}
 
 		var validate *validator.Validate
 
 		validate = validator.New(validator.WithRequiredStructEnabled())
 
-		if err := c.ShouldBind(&data); err != nil {
+		if err := c.ShouldBind(&Data); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"error": err.Error(),
 			})
 			return
 		}
 
-		err := validate.Struct(data)
+		err := validate.Struct(Data)
 
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
@@ -36,27 +42,48 @@ func CreateItem(db *gorm.DB) func(*gin.Context) {
 			})
 		}
 
-		student, err := data.ToModel()
+		student := Data.ToModel()
 
+		repo := mysql.NewStudentRepository(db)
+
+		err_InsertOne := repo.InsertOne(context.Background(), student)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"error": "Internal Server Error",
-			})
-			return
+			fmt.Println(err_InsertOne)
+			os.Exit(1)
 		}
-
-		data.FromModel(student)
-
-		//if err := db.Create(&student).Error; err != nil {
-		//	c.JSON(http.StatusBadRequest, gin.H{
-		//		"error": err.Error(),
-		//	})
-		//	return
-		//}
+		fmt.Println(student)
 
 		c.JSON(http.StatusOK, gin.H{
-			"id":      student.ID,
-			"student": data,
+			"data": student.ID,
+		})
+
+	}
+}
+
+func GetItem(db *gorm.DB) func(*gin.Context) {
+	return func(c *gin.Context) {
+
+		id, err := strconv.Atoi(c.Param("id"))
+
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+
+		fmt.Println(id)
+
+		repo := mysql.NewStudentRepository(db)
+
+		id_student, err := repo.GetOneByID(context.Background(), id)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+		fmt.Println(id_student)
+		c.JSON(http.StatusOK, gin.H{
+			"student": id_student,
 		})
 	}
 }

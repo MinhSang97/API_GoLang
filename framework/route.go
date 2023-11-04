@@ -24,7 +24,7 @@ func Route() {
 		{
 			items.POST("", handler.CreateItem(db))
 			items.GET("")
-			items.GET("/:id")
+			items.GET("/:id", handler.GetItem(db))
 			items.PATCH("/:id")
 			items.DELETE("/:id")
 

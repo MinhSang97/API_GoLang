@@ -2,6 +2,8 @@ package payload
 
 import (
 	"app/model"
+	"encoding/json"
+	"log"
 	"time"
 )
 
@@ -16,7 +18,7 @@ type AddStudentRequest struct {
 	UpdatedAt    time.Time `json:"updated_at"`
 }
 
-func (c *AddStudentRequest) ToModel() (*model.Student, error) {
+func (c *AddStudentRequest) ToModel() *model.Student {
 	student := &model.Student{
 		FirstName:    c.FirstName,
 		LastName:     c.LastName,
@@ -28,16 +30,22 @@ func (c *AddStudentRequest) ToModel() (*model.Student, error) {
 		UpdatedAt:    c.UpdatedAt,
 	}
 
-	return student, nil
+	return student
+}
+func (c *AddStudentRequest) FromJson(a string) {
+	err := json.Unmarshal([]byte(a), c)
+	if err != nil {
+		log.Fatalln(err)
+	}
 }
 
-func (c *AddStudentRequest) FromModel(student *model.Student) {
-	c.FirstName = student.FirstName
-	c.LastName = student.LastName
-	c.Age = student.Age
-	c.Grade = student.Grade
-	c.ClassName = student.ClassName
-	c.EntranceDate = student.EntranceDate
-	c.CreatedAt = student.CreatedAt
-	c.UpdatedAt = student.UpdatedAt
-}
+// func (c *AddStudentRequest) FromModel(student *model.Student) {
+// 	c.FirstName = student.FirstName
+// 	c.LastName = student.LastName
+// 	c.Age = student.Age
+// 	c.Grade = student.Grade
+// 	c.ClassName = student.ClassName
+// 	c.EntranceDate = student.EntranceDate
+// 	c.CreatedAt = student.CreatedAt
+// 	c.UpdatedAt = student.UpdatedAt
+// }

@@ -18,19 +18,8 @@ type Student struct {
 	UpdatedAt    time.Time `json:"updated_at"`
 }
 
-func (b Student) ReceiverGetFullName() string {
-	return b.FirstName + " " + b.LastName
-
-}
-func (b Student) ReceiverGetFirstName() string {
-	return b.FirstName
-
-}
-
-func (c *Student) SetName(a, b string) {
-	c.FirstName = a
-	c.LastName = b
-
+func (c *Student) TableName() string {
+	return "students"
 }
 
 func (c *Student) ToJson() string {
@@ -40,9 +29,6 @@ func (c *Student) ToJson() string {
 
 	}
 	return string(bs)
-}
-func (c *Student) TableName() string {
-	return "students"
 }
 
 func (c *Student) FromJson(a string) {
