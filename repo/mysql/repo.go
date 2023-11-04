@@ -43,6 +43,13 @@ func (s studentRepository) InsertOne(ctx context.Context, student *model.Student
 
 }
 
+func (s studentRepository) UpdateOne(ctx context.Context, id int, student *model.Student) error {
+	if err := s.db.Model(&model.Student{}).Where("id = ?", id).Updates(student).Error; err != nil {
+		return fmt.Errorf("update student error: %w", err)
+	}
+	return nil
+}
+
 var instance studentRepository
 
 func NewStudentRepository(db *gorm.DB) repo.StudentRepo {
