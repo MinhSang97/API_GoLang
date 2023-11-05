@@ -50,6 +50,13 @@ func (s studentRepository) UpdateOne(ctx context.Context, id int, student *model
 	return nil
 }
 
+func (s studentRepository) DeleteOne(ctx context.Context, id int) error {
+	if err := s.db.Where("id = ?", id).Delete(&model.Student{}).Error; err != nil {
+		return fmt.Errorf("delete student error: %w", err)
+	}
+	return nil
+}
+
 var instance studentRepository
 
 func NewStudentRepository(db *gorm.DB) repo.StudentRepo {
