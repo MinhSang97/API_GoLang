@@ -23,7 +23,7 @@ func Route() {
 		items := v1.Group("/items")
 		{
 			items.POST("", handler.CreateItem(db))
-			items.GET("")
+			items.GET("", handler.GetAllStudent(db))
 			items.GET("/:id", handler.GetIdStudent(db))
 			items.PATCH("/:id", handler.Update_One(db))
 			items.DELETE("/:id", handler.Delete_One(db))
