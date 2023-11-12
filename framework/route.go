@@ -19,6 +19,7 @@ func Route() {
 	// (PUT | PATCH) /v1/items/:id (update an item by id)
 	// DELETE /v1/items/:id (delete item by id)
 	r := gin.Default()
+	r.Use(middleware.ErrorHandler())
 	r.Use(middleware.BasicAuthMiddleware())
 
 	r.GET("/secure", func(c *gin.Context) {
