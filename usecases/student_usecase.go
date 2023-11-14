@@ -41,6 +41,6 @@ func (uc *studentUseCase) DeleteOne(ctx context.Context, id int) error {
 	return uc.studentRepo.DeleteOne(ctx, id)
 }
 
-func (uc *studentUseCase) Search(ctx context.Context, FirstName, LastName string) ([]model.Student, error) {
-	return uc.studentRepo.Search(ctx, FirstName, LastName)
+func (uc *studentUseCase) Search(ctx context.Context, Value string) ([]model.Student, error) {
+	return uc.studentRepo.Search(ctx, Value)
 }

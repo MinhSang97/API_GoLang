@@ -56,12 +56,13 @@ func (s studentRepository) DeleteOne(ctx context.Context, id int) error {
 	}
 	return nil
 }
-func (s studentRepository) Search(ctx context.Context, FirstName, LastName string) ([]model.Student, error) {
+func (s studentRepository) Search(ctx context.Context, Value string) ([]model.Student, error) {
 	var students []model.Student
 
 	// Use Find method instead of Where
-	if err := s.db.Where("first_name LIKE ?", "%"+FirstName+"%").
-		Where("last_name LIKE ?", "%"+LastName+"%").
+	if err := s.db.Where("first_name LIKE ?", "%"+Value+"%").
+		Or("last_name LIKE ?", "%"+Value+"%").
+		Or("class_name LIKE ?", "%"+Value+"%").
 		Find(&students).Error; err != nil {
 		return nil, err
 	}

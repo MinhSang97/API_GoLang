@@ -11,5 +11,5 @@ type StudentUsecase interface {
 	InsertOne(ctx context.Context, c *model.Student) error
 	UpdateOne(ctx context.Context, id int, student *model.Student) error
 	DeleteOne(ctx context.Context, id int) error
-	Search(ctx context.Context, FirstName, LastName string) ([]model.Student, error)
+	Search(ctx context.Context, Value string) ([]model.Student, error)
 }

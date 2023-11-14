@@ -11,13 +11,13 @@ import (
 func SearchStudents(db *gorm.DB) func(*gin.Context) {
 	return func(c *gin.Context) {
 		// Lấy giá trị của các tham số từ query string
-		LastName := c.Query("LastName")
-		FirstName := c.Query("FirstName")
+		Value := c.Query("Value")
+		//FirstName := c.Query("FirstName")
 
-		fmt.Println(FirstName, LastName)
+		fmt.Println("Seach with like", Value)
 
 		// Kiểm tra xem có ít nhất một tham số được truyền vào không
-		if FirstName == "" && LastName == "" {
+		if Value == "" {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"error": "At least one search parameter is required",
 			})
@@ -26,7 +26,7 @@ func SearchStudents(db *gorm.DB) func(*gin.Context) {
 
 		uc := usecases.NewStudentUseCase()
 
-		students, err := uc.Search(c.Request.Context(), FirstName, LastName)
+		students, err := uc.Search(c.Request.Context(), Value)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"error": err.Error(),

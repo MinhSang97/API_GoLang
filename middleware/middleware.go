@@ -67,7 +67,7 @@ func BasicAuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		fmt.Println("Authentication successful")
+		fmt.Println("Authentication successful - ", "User:", user, "Pass:", pass)
 
 		// Call the next handler
 		c.Next()

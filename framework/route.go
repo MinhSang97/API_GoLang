@@ -40,14 +40,6 @@ func Route() {
 		}
 	}
 
-	r.GET("/ping", func(c *gin.Context) {
-		// Gây ra một lỗi để kiểm tra middleware
-		panic("Some error occurred")
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 
 }
