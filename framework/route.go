@@ -35,6 +35,7 @@ func Route() {
 			items.GET("/:id", handler.GetId(db))
 			items.PATCH("/:id", handler.Update_One(db))
 			items.DELETE("/:id", handler.Delete_One(db))
+			items.GET("/search", handler.SearchStudents(db))
 
 		}
 	}

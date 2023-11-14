@@ -4,6 +4,6 @@ basic_auth:
     - username: admin
       password: $2a$12$TqGMcaBkdF1J0b2QWDuFwurZNTD3bYpd4EZsDH6H81lGnY8lL9Rvi
     - username: another_user
-      password: $2a$12$AnotherPasswordHash...
+      password: nvjnsoejcnsoeknwnefowen
     - username: sang
       password: 123456

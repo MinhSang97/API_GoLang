@@ -1,13 +1,10 @@
 package handler
 
 import (
-	"app/repo/mysql"
-	"context"
-	"fmt"
+	"app/usecases"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"
-	"os"
 	"strconv"
 )
 
@@ -22,12 +19,22 @@ func Delete_One(db *gorm.DB) func(*gin.Context) {
 			return
 		}
 
-		repo := mysql.NewStudentRepository(db)
+		//repo := mysql.NewStudentRepository(db)
+		//
+		//err = repo.DeleteOne(context.Background(), id)
+		//if err != nil {
+		//	fmt.Println(err)
+		//	os.Exit(1)
+		//}
 
-		err = repo.DeleteOne(context.Background(), id)
+		uc := usecases.NewStudentUseCase()
+
+		err = uc.DeleteOne(c.Request.Context(), id)
 		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": err.Error(),
+			})
+			return
 		}
 
 		c.JSON(http.StatusOK, gin.H{

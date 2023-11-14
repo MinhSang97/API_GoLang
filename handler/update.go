@@ -2,13 +2,10 @@ package handler
 
 import (
 	"app/model"
-	"app/repo/mysql"
-	"context"
-	"fmt"
+	"app/usecases"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"
-	"os"
 	"strconv"
 )
 
@@ -32,19 +29,22 @@ func Update_One(db *gorm.DB) func(*gin.Context) {
 			return
 		}
 
-		repo := mysql.NewStudentRepository(db)
+		uc := usecases.NewStudentUseCase()
 
-		err = repo.UpdateOne(context.Background(), id, &updatedStudent)
-
+		err = uc.UpdateOne(c.Request.Context(), id, &updatedStudent)
 		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": err.Error(),
+			})
+			return
 		}
 
-		after_update, err := repo.GetOneByID(context.Background(), id)
+		after_update, err := uc.GetOneByID(c.Request.Context(), id)
 		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": err.Error(),
+			})
+			return
 		}
 
 		c.JSON(http.StatusOK, gin.H{

@@ -1,14 +1,15 @@
 package usecases
 
 import (
-	"app/usecases/dto"
+	"app/model"
 	"context"
 )
 
-type StudentRepo interface {
-	GetOneByID(ctx context.Context, id int) (dto.StudentCase, error)
-	GetAll(ctx context.Context) ([]dto.StudentCase, error)
-	InsertOne(ctx context.Context, c *dto.StudentCase) error
-	UpdateOne(ctx context.Context, id int, student *dto.StudentCase) error
+type StudentUsecase interface {
+	GetOneByID(ctx context.Context, id int) (model.Student, error)
+	GetAll(ctx context.Context) ([]model.Student, error)
+	InsertOne(ctx context.Context, c *model.Student) error
+	UpdateOne(ctx context.Context, id int, student *model.Student) error
 	DeleteOne(ctx context.Context, id int) error
+	Search(ctx context.Context, FirstName, LastName string) ([]model.Student, error)
 }

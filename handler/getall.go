@@ -2,13 +2,10 @@ package handler
 
 import (
 	"app/payload"
-	"app/repo/mysql"
-	"context"
-	"fmt"
+	"app/usecases"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"
-	"os"
 )
 
 func GetAllStudent(db *gorm.DB) func(*gin.Context) {
@@ -23,17 +20,45 @@ func GetAllStudent(db *gorm.DB) func(*gin.Context) {
 			return
 		}
 
-		repo := mysql.NewStudentRepository(db)
+		uc := usecases.NewStudentUseCase()
 
-		studentsall, err := repo.GetAll(context.Background())
+		studentall, err := uc.GetAll(c.Request.Context())
 		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": err.Error(),
+			})
+			return
 		}
-		fmt.Println(studentsall)
 
 		c.JSON(http.StatusOK, gin.H{
-			"studentall": studentsall,
+			"studentall": studentall, // Change this to "studentall"
 		})
 	}
 }
+
+//func ListStudent(db *gorm.DB) func(*gin.Context) {
+//	return func(c *gin.Context) {
+//
+//		var Data = payload.Paging{}
+//
+//		if err := c.ShouldBind(&Data); err != nil {
+//			c.JSON(http.StatusBadRequest, gin.H{
+//				"error": err.Error(),
+//			})
+//			return
+//		}
+//
+//		repo := mysql.NewStudentRepository(db)
+//
+//		studentsall, err := repo.GetAll(context.Background())
+//		if err != nil {
+//			fmt.Println(err)
+//			os.Exit(1)
+//		}
+//		fmt.Println(studentsall)
+//
+//		c.JSON(http.StatusOK, gin.H{
+//			"studentall": studentsall,
+//		})
+//	}
+//}

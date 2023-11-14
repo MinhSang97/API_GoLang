@@ -2,23 +2,17 @@ package handler
 
 import (
 	"app/payload"
-	"app/repo/mysql"
-	"context"
-	"fmt"
+	"app/usecases"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"gorm.io/gorm"
 	"net/http"
-	"os"
 )
 
 func CreateItem(db *gorm.DB) func(*gin.Context) {
 	return func(c *gin.Context) {
-
 		var Data = payload.AddStudentRequest{}
-
 		var validate *validator.Validate
-
 		validate = validator.New(validator.WithRequiredStructEnabled())
 
 		if err := c.ShouldBind(&Data); err != nil {
@@ -39,14 +33,17 @@ func CreateItem(db *gorm.DB) func(*gin.Context) {
 
 		student := Data.ToModel()
 
-		repo := mysql.NewStudentRepository(db)
+		uc := usecases.NewStudentUseCase()
 
-		err_insertOne := repo.InsertOne(context.Background(), student)
-		if err_insertOne != nil {
-			fmt.Println(err_insertOne)
-			os.Exit(1)
+		// Pass the context and the address of the student (pointer to model.Student)
+		err = uc.InsertOne(c.Request.Context(), student)
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": err.Error(),
+			})
+			return
 		}
-		fmt.Println(student)
 
 		c.JSON(http.StatusOK, gin.H{
 			"data": student.ID,

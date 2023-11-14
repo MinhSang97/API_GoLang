@@ -5,7 +5,8 @@ import (
 	"time"
 )
 
-type StudentCase struct {
+type Student struct {
+	ID           int64     `json:"id"`
 	FirstName    string    `json:"first_name" validate:"required" gorm:"-"`
 	LastName     string    `json:"last_name" validate:"required"`
 	Age          int       `json:"age" validate:"required,gt=0"`
@@ -16,8 +17,8 @@ type StudentCase struct {
 	UpdatedAt    time.Time `json:"updated_at"`
 }
 
-func (c *StudentCase) ToPayload() *payload.AddStudentRequest {
-	student_case := &payload.AddStudentRequest{
+func (c *Student) ToPayload() *payload.AddStudentRequest {
+	studentPayload := &payload.AddStudentRequest{
 		FirstName:    c.FirstName,
 		LastName:     c.LastName,
 		Age:          c.Age,
@@ -28,5 +29,5 @@ func (c *StudentCase) ToPayload() *payload.AddStudentRequest {
 		UpdatedAt:    c.UpdatedAt,
 	}
 
-	return student_case
+	return studentPayload
 }
