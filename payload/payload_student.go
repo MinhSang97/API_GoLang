@@ -7,12 +7,6 @@ import (
 	"time"
 )
 
-type Paging struct {
-	Page  int   `json:"page" form:"page"`
-	Limit int   `json:"limit" form:"limit"`
-	Total int64 `json:"total" form:"-"`
-}
-
 type AddStudentRequest struct {
 	FirstName    string    `json:"first_name" validate:"required"`
 	LastName     string    `json:"last_name" validate:"required"`
@@ -38,20 +32,10 @@ func (c *AddStudentRequest) ToModel() *model.Student {
 
 	return student
 }
+
 func (c *AddStudentRequest) FromJson(a string) {
 	err := json.Unmarshal([]byte(a), c)
 	if err != nil {
 		log.Fatalln(err)
 	}
 }
-
-// func (c *AddStudentRequest) FromModel(student *model.Student) {
-// 	c.FirstName = student.FirstName
-// 	c.LastName = student.LastName
-// 	c.Age = student.Age
-// 	c.Grade = student.Grade
-// 	c.ClassName = student.ClassName
-// 	c.EntranceDate = student.EntranceDate
-// 	c.CreatedAt = student.CreatedAt
-// 	c.UpdatedAt = student.UpdatedAt
-// }

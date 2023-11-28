@@ -25,7 +25,10 @@ func (s studentRepository) GetOneByID(ctx context.Context, id int) (model.Studen
 
 func (s studentRepository) GetAll(ctx context.Context) ([]model.Student, error) {
 	var users []model.Student
-	if err := s.db.Find(&users).Error; err != nil {
+	if err := s.db.Find(&users).
+		//Offset((handler.Paging - 1) * handler.Paging.Limit).
+		//Limit(handler.Paging.Limit).
+		Error; err != nil {
 		return users, fmt.Errorf("get all students error: %w", err)
 
 	}
@@ -69,6 +72,18 @@ func (s studentRepository) Search(ctx context.Context, Value string) ([]model.St
 
 	return students, nil
 }
+
+// ...
+
+func (s studentRepository) GetPaginated(ctx context.Context, offset, limit int) ([]model.Student, error) {
+	var users []model.Student
+	if err := s.db.Offset(offset).Limit(limit).Find(&users).Error; err != nil {
+		return users, fmt.Errorf("get paginated students error: %w", err)
+	}
+	return users, nil
+}
+
+// ...
 
 var instance studentRepository
 
