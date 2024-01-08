@@ -16,6 +16,8 @@ type AddStudentRequest struct {
 	EntranceDate time.Time `json:"entrance_date" validate:"required"`
 	CreatedAt    time.Time `json:"created_at"`
 	UpdatedAt    time.Time `json:"updated_at"`
+	OldDueDate   time.Time
+	NewDueDate   *time.Time
 }
 
 func (c *AddStudentRequest) ToModel() *model.Student {
