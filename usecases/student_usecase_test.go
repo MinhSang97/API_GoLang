@@ -20,11 +20,11 @@ func TestStudentUseCase_GetStudentByID(t *testing.T) {
 	useCase := NewStudentUseCase()
 
 	// Thiết lập behavior cho mockRepo
-	expectedStudent := model.Student{ID: 13}
-	mockRepo.EXPECT().GetOneByID(gomock.Any(), 1).Return(expectedStudent, nil)
+	expectedStudent := model.Student{ID: 53}
+	mockRepo.EXPECT().GetOneByID(gomock.Any(), 53).Return(expectedStudent, nil)
 
 	// Thực hiện unit test
-	student, err := useCase.GetOneByID(context.Background(), 1)
+	student, err := useCase.GetOneByID(context.Background(), 53)
 
 	assert.Nil(t, err)
 	assert.Equal(t, expectedStudent, student)
