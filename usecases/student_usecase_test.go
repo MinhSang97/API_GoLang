@@ -17,14 +17,14 @@ func TestStudentUseCase_GetStudentByID(t *testing.T) {
 	defer ctrl.Finish()
 
 	mockRepo := mocks.NewMockStudentRepo(ctrl)
-	useCase := NewStudentUseCase(mockRepo)
+	useCase := NewStudentUseCase()
 
 	// Thiết lập behavior cho mockRepo
 	expectedStudent := model.Student{ID: 13}
 	mockRepo.EXPECT().GetOneByID(gomock.Any(), 1).Return(expectedStudent, nil)
 
 	// Thực hiện unit test
-	student, err := useCase.GetStudentByID(context.Background(), 1)
+	student, err := useCase.GetOneByID(context.Background(), 1)
 
 	assert.Nil(t, err)
 	assert.Equal(t, expectedStudent, student)
@@ -35,7 +35,7 @@ func TestStudentUseCase_GetAllStudents(t *testing.T) {
 	defer ctrl.Finish()
 
 	mockRepo := mocks.NewMockStudentRepo(ctrl)
-	useCase := NewStudentUseCase(mockRepo)
+	useCase := NewStudentUseCase()
 
 	// Thiết lập behavior cho mockRepo
 	expectedStudents := []model.Student{
@@ -45,7 +45,7 @@ func TestStudentUseCase_GetAllStudents(t *testing.T) {
 	mockRepo.EXPECT().GetAll(gomock.Any()).Return(expectedStudents, nil)
 
 	// Thực hiện unit test
-	students, err := useCase.GetAllStudents(context.Background())
+	students, err := useCase.GetAll(context.Background())
 
 	assert.Nil(t, err)
 	assert.Equal(t, expectedStudents, students)
@@ -56,7 +56,7 @@ func TestStudentUseCase_CreateStudent(t *testing.T) {
 	defer ctrl.Finish()
 
 	mockRepo := mocks.NewMockStudentRepo(ctrl)
-	useCase := NewStudentUseCase(mockRepo)
+	useCase := NewStudentUseCase()
 
 	// Thiết lập behavior cho mockRepo
 	mockRepo.EXPECT().InsertOne(gomock.Any(), gomock.Any()).Return(nil)

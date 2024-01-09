@@ -21,7 +21,6 @@ func NewStudentUseCase() StudentUsecase {
 }
 
 func (uc *studentUseCase) GetOneByID(ctx context.Context, id int) (model.Student, error) {
-
 	return uc.studentRepo.GetOneByID(ctx, id)
 }
 
@@ -43,4 +42,8 @@ func (uc *studentUseCase) DeleteOne(ctx context.Context, id int) error {
 
 func (uc *studentUseCase) Search(ctx context.Context, Value string) ([]model.Student, error) {
 	return uc.studentRepo.Search(ctx, Value)
+}
+
+func (uc *studentUseCase) CreateStudent(ctx context.Context, student *model.Student) error {
+	return uc.studentRepo.CreateStudent(ctx, student)
 }

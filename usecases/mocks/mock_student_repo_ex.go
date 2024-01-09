@@ -4,7 +4,6 @@
 // Package mock_usecases is a generated GoMock package.
 package mocks
 
-
 import (
 	model "app/model"
 	context "context"

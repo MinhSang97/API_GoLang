@@ -75,6 +75,17 @@ func (s studentRepository) Search(ctx context.Context, Value string) ([]model.St
 
 // ...
 
+func (s studentRepository) CreateStudent(ctx context.Context, student *model.Student) error {
+	if err := s.db.Create(&student).Error; err != nil {
+		return fmt.Errorf("create student error: %w", err)
+	}
+	return nil
+}
+
+// ...
+
+// ...
+
 func (s studentRepository) GetPaginated(ctx context.Context, offset, limit int) ([]model.Student, error) {
 	var users []model.Student
 	if err := s.db.Offset(offset).Limit(limit).Find(&users).Error; err != nil {
