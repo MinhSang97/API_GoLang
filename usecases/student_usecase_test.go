@@ -3,7 +3,7 @@ package usecases
 
 import (
 	"app/model"
-	"app/usecases/mocks"
+	mockStudentRepo "app/repo/mocks"
 
 	"context"
 	"testing"
@@ -16,8 +16,10 @@ func TestStudentUseCase_GetStudentByID(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	mockRepo := mocks.NewMockStudentRepo(ctrl)
-	useCase := NewStudentUseCase()
+	mockRepo := mockStudentRepo.NewMockStudentRepo(ctrl)
+	useCase := studentUseCase{
+		studentRepo: mockRepo,
+	}
 
 	// Thiết lập behavior cho mockRepo
 	expectedStudent := model.Student{ID: 53}
@@ -34,8 +36,10 @@ func TestStudentUseCase_GetAllStudents(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	mockRepo := mocks.NewMockStudentRepo(ctrl)
-	useCase := NewStudentUseCase()
+	mockRepo := mockStudentRepo.NewMockStudentRepo(ctrl)
+	useCase := studentUseCase{
+		studentRepo: mockRepo,
+	}
 
 	// Thiết lập behavior cho mockRepo
 	expectedStudents := []model.Student{
@@ -55,11 +59,13 @@ func TestStudentUseCase_CreateStudent(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	mockRepo := mocks.NewMockStudentRepo(ctrl)
-	useCase := NewStudentUseCase()
+	mockRepo := mockStudentRepo.NewMockStudentRepo(ctrl)
+	useCase := studentUseCase{
+		studentRepo: mockRepo,
+	}
 
 	// Thiết lập behavior cho mockRepo
-	mockRepo.EXPECT().InsertOne(gomock.Any(), gomock.Any()).Return(nil)
+	mockRepo.EXPECT().CreateStudent(gomock.Any(), gomock.Any()).Return(nil)
 
 	// Thực hiện unit test
 	student := &model.Student{ID: 15}
