@@ -13,9 +13,9 @@ type Student struct {
 	Age          int       `json:"age"`
 	Grade        float32   `json:"grade"`
 	ClassName    string    `json:"class_name"`
-	EntranceDate time.Time `json:"entrance_date"`
-	CreatedAt    time.Time `json:"created_at"`
-	UpdatedAt    time.Time `json:"updated_at"`
+	EntranceDate time.Time `json:"-"`
+	CreatedAt    time.Time `json:"-"`
+	UpdatedAt    time.Time `json:"-"`
 }
 
 func (c *Student) TableName() string {
