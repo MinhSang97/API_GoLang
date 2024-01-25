@@ -36,7 +36,9 @@ func CreateItem(db *gorm.DB) func(*gin.Context) {
 		uc := usecases.NewStudentUseCase()
 
 		// Pass the context and the address of the student (pointer to model.Student)
-		err = uc.InsertOne(c.Request.Context(), student)
+
+		err = uc.CreateStudent(c.Request.Context(), student)
+		//err = uc.InsertOne(c.Request.Context(), student)
 
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
