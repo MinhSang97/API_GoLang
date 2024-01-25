@@ -97,7 +97,7 @@ func (s studentRepository) GetOneByID(ctx context.Context, id int) (model.Studen
 		return student, fmt.Errorf("Student not found in MySQL")
 	}
 
-	log.Println("Student fetched from MySQL")
+	log.Println("Student query from MySQL")
 
 	// Cache thông tin sinh viên vào Redis
 	jsonStudent, err := json.Marshal(student)
@@ -117,17 +117,56 @@ func (s studentRepository) GetOneByID(ctx context.Context, id int) (model.Studen
 	return student, nil
 }
 
+//	func (s studentRepository) GetAll(ctx context.Context) ([]model.Student, error) {
+//		var users []model.Student
+//		if err := s.db.Find(&users).
+//			//Offset((handler.Paging - 1) * handler.Paging.Limit).
+//			//Limit(handler.Paging.Limit).
+//			Error; err != nil {
+//			return users, fmt.Errorf("get all students error: %w", err)
+//
+//		}
+//		return users, nil
+//
+// }
 func (s studentRepository) GetAll(ctx context.Context) ([]model.Student, error) {
-	var users []model.Student
-	if err := s.db.Find(&users).
-		//Offset((handler.Paging - 1) * handler.Paging.Limit).
-		//Limit(handler.Paging.Limit).
-		Error; err != nil {
-		return users, fmt.Errorf("get all students error: %w", err)
+	var students []model.Student
+	RedisClient := redis.ConnectRedis()
 
+	// Đọc danh sách sinh viên từ Redis (nếu có)
+	cachedStudentsJSON, err := RedisClient.Get(ctx, "students").Result()
+	if err == nil {
+		var cachedStudents []model.Student
+		err := json.Unmarshal([]byte(cachedStudentsJSON), &cachedStudents)
+		if err != nil {
+			log.Println("Failed to unmarshal students from Redis:", err)
+			return students, fmt.Errorf("Failed to unmarshal students from Redis: %w", err)
+		}
+		log.Println("Students fetched from Redis")
+		// Handle the response here, e.g., log or return the cached students
+		return cachedStudents, nil
 	}
-	return users, nil
 
+	// Nếu không tìm thấy trong Redis, đọc từ cơ sở dữ liệu MySQL
+	if err := s.db.Find(&students).Error; err != nil {
+		return students, fmt.Errorf("get all students error: %w", err)
+	}
+
+	// Cache danh sách sinh viên vào Redis
+	jsonStudents, err := json.Marshal(students)
+	if err != nil {
+		log.Println("Failed to marshal students:", err)
+		return students, fmt.Errorf("Failed to marshal students: %w", err)
+	}
+
+	err = redis.RedisClient.Set(ctx, "students", jsonStudents, 0).Err()
+	if err != nil {
+		log.Println("Failed to cache students in Redis:", err)
+	}
+
+	log.Println("Students query from MySQL")
+
+	return students, nil
 }
 
 func (s studentRepository) InsertOne(ctx context.Context, student *model.Student) error {
